@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "notes": {
-    "extra-cli-options": "--ssl --ssl-key key.pem --ssl-cert cert.pem"
+    "extra-cli-options": "--ssl true --ssl-key key.pem --ssl-cert cert.pem"
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config ./proxy.json --ssl --ssl-key key.pem --ssl-cert cert.pem",
-    "start-server": "./node_modules/.bin/ts-node ./server/server.ts --secure",
+    "start": "ng serve --proxy-config ./proxy.json",
+    "start-server": "./node_modules/.bin/ts-node -P ./server/server.tsconfig.json ./server/server.ts --secure true",
     "server": "./node_modules/.bin/nodemon  -w ./server --ext \".ts\" --exec \"npm run start-server\"",
     "hash": "node ./demos/hash.js",
     "hash-salt": "node ./demos/hash-salt.js",

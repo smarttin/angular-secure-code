@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-security-course": {
+    "angular-secure": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -55,18 +55,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-security-course:build"
+            "browserTarget": "angular-secure:build",
+            "sslKey": "key.pem",
+            "sslCert": "cert.pem",
+            "ssl": true
           },
           "configurations": {
             "production": {
-              "browserTarget": "angular-security-course:build:production"
+              "browserTarget": "angular-secure:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-security-course:build"
+            "browserTarget": "angular-secure:build"
           }
         },
         "test": {
@@ -98,7 +101,7 @@
         }
       }
     },
-    "angular-security-course-e2e": {
+    "angular-secure-e2e": {
       "root": "",
       "sourceRoot": "",
       "projectType": "application",
@@ -107,7 +110,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "angular-security-course:serve"
+            "devServerTarget": "angular-secure:serve"
           }
         },
         "lint": {
@@ -122,7 +125,7 @@
       }
     }
   },
-  "defaultProject": "angular-security-course",
+  "defaultProject": "angular-secure",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "",
