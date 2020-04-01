@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "signup",
@@ -18,22 +19,25 @@ export class SignupComponent implements OnInit {
     // "err_user": 'Could not create user'
   };
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.form = this.fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      confirm: ['', Validators.required]
+      email: ['test@gmail.com', Validators.required],
+      password: ['Password10', Validators.required],
+      confirm: ['Password10', Validators.required]
     });
   }
 
   ngOnInit() {}
 
   signUp() {
-    const val = this.form.value;
-    if (val.email && val.password && val.password === val.confirm) {
-      this.authService.signUp(val.email, val.password)
+    const formValue = this.form.value;
+    if (formValue.email && formValue.password && formValue.password === formValue.confirm) {
+      this.authService.signUp(formValue.email, formValue.password)
         .subscribe(
-          () => console.log('User created Successfully'),
+          () => {
+            this.router.navigate(['/']);
+            console.log('User created Successfully');
+          },
           response => this.errors = response.error.errors
         );
     }
