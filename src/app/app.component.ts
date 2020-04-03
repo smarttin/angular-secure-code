@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
   logout() {
     this.authService.logout().subscribe(
       (result) => {
-        console.log(result);
+        console.log('User logout successful');
         this.router.navigate(['/login']);
       },
       (error) => console.log(error),

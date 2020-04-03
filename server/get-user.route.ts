@@ -1,14 +1,13 @@
 import { Response, Request } from 'express';
-import { sessionStore } from './session.store';
+import { db } from './database';
 
 export function getUser(req: Request, res: Response) {
-  const sessionId = req.cookies['SESSIONID'];
-
-  const user = sessionStore.findUserBySessionId(sessionId);
-
+  // console.log('req[userId] from get-user route', req['userId']);
+  const user = db.findUserById(req['userId']);
+  // console.log('user from get-user route', user);
   if (user) {
-    res.status(200).json(user);
+    res.status(200).json({email: user.email, id: user.id});
   } else {
-    res.sendStatus(204);
+    res.status(204).json({message: 'No content found'});
   }
 }

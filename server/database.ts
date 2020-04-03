@@ -25,7 +25,6 @@ class InMemoryDatabase {
   }
 
   findUserByEmail(email: string): DbUser {
-
     console.log('Finding user by email:', email);
 
     const users = _.values(USERS);
@@ -37,6 +36,21 @@ class InMemoryDatabase {
     return user;
   }
 
+  findUserById(userId: string): DbUser {
+    let user;
+
+    if (userId) {
+      console.log('looking for userId ', userId);
+
+      const users = _.values(USERS);
+
+      user = _.find(users, user => user.id.toString() === userId);
+
+      console.log('user data found:', user);
+    }
+
+    return user;
+  }
 }
 
 export const db = new InMemoryDatabase();
