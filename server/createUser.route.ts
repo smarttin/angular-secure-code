@@ -3,8 +3,7 @@ import { db } from './database';
 import { USERS } from './database-data';
 import * as argon2 from 'argon2';
 import { validatePassword } from './password-validation';
-import { randomBytes } from './security.utils';
-import { sessionStore } from './session.store';
+import { createSessionToken, createCsrfToken } from './security.utils';
 
 
 export function createUser(req: Request, res: Response) {
@@ -16,7 +15,8 @@ export function createUser(req: Request, res: Response) {
     console.log(errors);
     res.status(400).json({errors});
   } else {
-    createUserAndSession(res, email, password);
+    createUserAndSession(res, email, password)
+      .catch(() => res.sendStatus(500));
   }
 
 }
@@ -28,12 +28,13 @@ async function createUserAndSession(res: Response,email, password) {
 
   console.log(USERS);
 
-  const sessionId = await randomBytes(32).then(bytes => bytes.toString('hex'));
-  console.log('sessionId', sessionId);
+  const sessionToken = await createSessionToken(user.id.toString());
 
-  sessionStore.createSession(sessionId, user);
+  const csrfToken = await createCsrfToken();
 
-  res.cookie('SESSIONID', sessionId, {httpOnly: true, secure: true});
+  res.cookie('SESSIONID', sessionToken, {httpOnly: true, secure: true});
+
+  res.cookie('XSRF-TOKEN', csrfToken);
 
   res.status(200).json({id: user.id, email: user.email});
 }

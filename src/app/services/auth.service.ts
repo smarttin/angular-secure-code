@@ -52,4 +52,3 @@ export class AuthService {
        );
   }
 }
-// user => this.subject.next(ANONYMOUS_USER)

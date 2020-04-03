@@ -7,13 +7,17 @@ import { createUser } from './createUser.route';
 import { getUser } from './get-user.route';
 import { logout } from './logout.route';
 import { login } from './login.route';
+import { retrieveUserIdFromRequest } from './get-user-middleware';
+import { isAuthenticated } from './isAuth.middleware';
+import { checkCsrfToken } from './csrf.middleware';
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const app: Application = express();
 
-app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(retrieveUserIdFromRequest);
+app.use(bodyParser.json());
 
 const commandLineArgs = require('command-line-args');
 
@@ -24,14 +28,14 @@ const optionDefinitions = [
 const options = commandLineArgs(optionDefinitions);
 
 // REST API
-app.route('/api/lessons').get(readAllLessons);
+app.route('/api/lessons').get(isAuthenticated, readAllLessons);
 app.route('/api/signup').post(createUser);
 app.route('/api/user').get(getUser);
-app.route('/api/logout').post(logout);
+app.route('/api/logout').post(isAuthenticated, checkCsrfToken, logout);
 app.route('/api/login').post(login);
 
 
-console.log(options);
+// console.log(options);
 
 if (options.secure) {
   const httpsServer: any = https.createServer(

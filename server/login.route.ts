@@ -2,8 +2,7 @@ import { Request, Response } from 'express';
 import { db } from './database';
 import { DbUser } from './db-user';
 import * as argon2 from 'argon2';
-import { randomBytes } from './security.utils';
-import { sessionStore } from './session.store';
+import { createSessionToken, createCsrfToken } from './security.utils';
 
 export function login(req: Request, res: Response) {
   const { email, password } = req.body;
@@ -17,19 +16,15 @@ export function login(req: Request, res: Response) {
   }
 }
 
-// attemptLogin(password, user)
-//       .then((sessionId) => {
-//         res.cookie('SESSIONID', sessionId, {httpOnly: true, secure: true});
-
-//         res.status(200).json({id: user.id, email: user.email});
-//       })
-//       .catch(() => res.sendStatus(403));
-
 async function loginAndBUildResponse(password, user: DbUser, res: Response) {
   try {
     const sessionId = await attemptLogin(password, user);
 
+    const csrfToken = await createCsrfToken();
+
     res.cookie('SESSIONID', sessionId, {httpOnly: true, secure: true});
+
+    res.cookie('XSRF-TOKEN', csrfToken);
 
     res.status(200).json({id: user.id, email: user.email});
 
@@ -45,10 +40,6 @@ async function attemptLogin(password, user: DbUser) {
     throw new Error('Password invalid');
   }
 
-  const sessionId = await randomBytes(32).then(bytes => bytes.toString('hex'));
-  // console.log('sessionId', sessionId);
-
-  sessionStore.createSession(sessionId, user);
-
-  return sessionId;
+  return createSessionToken(user.id.toString());
 }
+
