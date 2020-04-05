@@ -18,7 +18,6 @@ export class LessonsComponent implements OnInit {
 
   ngOnInit() {
     this.lessons$ = this.lessonsService.loadAllLessons();
-    this.isLoggedIn$ = this.authService.isLoggedIn$;
   }
 
 }

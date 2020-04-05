@@ -4,8 +4,6 @@ import {HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { LessonsComponent } from './lessons/lessons.component';
-import { LoginComponent } from './login/login.component';
-import { SignupComponent } from './signup/signup.component';
 import {RouterModule} from '@angular/router';
 import {routesConfig} from './routes.config';
 import {LessonsService} from './services/lessons.service';
@@ -17,8 +15,6 @@ import {ReactiveFormsModule} from '@angular/forms';
   declarations: [
     AppComponent,
     LessonsComponent,
-    LoginComponent,
-    SignupComponent
   ],
   imports: [
     BrowserModule,
